@@ -47,23 +47,34 @@ def configdrive(S):
         S.write(bh+c)
         sleep(0.05)
 
-def movedrive(S,steps,direc):
+def movedrive(S,step,direc,ymov):
     """
-    5000 steps/inch, 1000 is one rev. of motor
+    10000 steps/inch, 1000 is one rev. of motor
     direc: positive: forward or up
            negative: backward or down
     """
 #%% move!
-    #S.write(bh+b'\x00\x01\xe8\x03') #x-1000
-    for i in range(10):
-        S.write(bh+b'\x80\x01\xe8\x03') #x-1000
-        sleep(0.5)
+    if direc=='-':
+        bdir = b'\x80'
+    elif direc=='+':
+        bdir = b'\x00'
+
+    if ymov:
+        bxy = b'\x41'
+    else:
+        bxy = b'\x01'
+
+    bstep=step.to_bytes((step.bit_length() // 8) + 1, byteorder='little')
+
+    S.write(bh+bdir+bxy+bstep)
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
     p = ArgumentParser(description='GeckoDrive BitBang code')
-    p.add_argument('--steps',help='number of steps to move on each cmd',type=int,default=1000)
+    p.add_argument('--steps',help='(default 1cm) number of steps to move on each cmd',type=int,
+                   default=int(10000/2.54))
     p.add_argument('-d','--dir',help='+ fwd, - rev',default='-')
+    p.add_argument('-y','--y',help='move in y',action='store_true')
     p = p.parse_args()
 
     try:
@@ -71,9 +82,9 @@ if __name__ == '__main__':
 
         configdrive(S)
 
-        movedrive(S,p.steps,p.dir)
-
+        movedrive(S,p.steps,p.dir,p.y)
     except KeyboardInterrupt:
         pass
     finally:
+        print('shutdown')
         S.close()
