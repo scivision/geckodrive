@@ -13,6 +13,7 @@ if __name__ == '__main__':
     p.add_argument('-s','--stepsperinch',help='steps per inch for your system',type=int,default=10000)
     p.add_argument('-a','--accel',help='acceleration of movements (dont jerk the load)',type=int,default=5)
     p.add_argument('-v','--vel',help='velocity of movements',type=int,default=100)
+    p.add_argument('-p','--port',help='RS485 adapter port',default='/dev/ttyUSB0')
     p = p.parse_args()
 
     try:
