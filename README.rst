@@ -8,6 +8,8 @@ As a result the bytes sent by GeckoMotion to the GeckoDrive for various commands
 For your safety, do not use this code in any way where living things or property or anything is at risk. 
 There is no Emergency Stop facility in this code.
 
+.. contents::
+
 Prereq
 ======
 This program is designed for Python >= 3.5, which can be obtained via::
