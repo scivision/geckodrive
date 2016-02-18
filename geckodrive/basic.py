@@ -28,7 +28,7 @@ class Simport():
 
 def connectdrive(port=None):
     if port == '/dev/null': #simulation mode
-        print('sim mode')
+        print('simulation open')
         return Simport()
     elif port is None:
         port = PORT
