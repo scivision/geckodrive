@@ -30,7 +30,9 @@ def connectdrive(port='/dev/ttyUSB0'):
 
     return S
 
-def configdrive(S):
+def configdrive(S,accel=10,vel=100):
+    baccel = int2bytes(accel)
+    bvel = int2bytes(vel)
 #%% params
     clist = [b'\x19\x0e\x0a\x32', # x configure: 2.5 amps, idle at 50% after 1 seconds
              b'\x19\x4e\x0a\x32', # y configure: 2.5 amps, idle at 50% after 1 seconds
@@ -40,10 +42,10 @@ def configdrive(S):
              b'\x00\x53\xe8\x03', # y offset 1000
              b'\x00\x0a\x00\x00', # analog inputs to {0} ; NO AXIS USING ANALOG
              b'\x00\x0b\x00\x00', # vector axis are {0} ; NO AXIS USING VECTOR
-             b'\x00\x0c\x1e\x00', # x acceleration 30 ; RUN ACCELERATION
-             b'\x00\x4c\x1e\x00', # y acceleration 30 ; RUN ACCELERATION
-             b'\x00\x07\xa0\x0f', # x velocity 4000 ; RUN VELOCITY
-             b'\x00\x47\xa0\x0f', # y velocity 4000 ; RUN VELOCITY
+             b'\x00\x0c'+baccel, # x acceleration
+             b'\x00\x4c'+baccel, # y acceleration
+             b'\x00\x07'+bvel, # x velocity
+             b'\x00\x47'+bvel, # y velocity
             ]
 
     for c in clist:
@@ -56,17 +58,20 @@ def movedrive(S,step,direc,ymov):
     direc: positive: forward or up
            negative: backward or down
     """
-#%% move!
+#%% which direction
     if direc=='-':
         bdir = b'\x80'
     elif direc=='+':
         bdir = b'\x00'
-
+#%% which axis
     if ymov:
         bxy = b'\x41'
     else:
         bxy = b'\x01'
-
-    bstep=step.to_bytes((step.bit_length() // 8) + 1, byteorder='little')
-
+#%% how many steps
+    bstep = int2bytes(step)
+#%% MOVE (no abort)
     S.write(bh+bdir+bxy+bstep)
+
+def int2bytes(n,byteorder='little'):
+    return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)

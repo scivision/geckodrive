@@ -30,3 +30,5 @@ Usage
   
 -d    \+ or - direction along your axis to move
 -y    move the second drive (for systems with two GM215 tied together)
+-a    acceleration for all axes
+-v    velocity for all axes
