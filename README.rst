@@ -28,5 +28,5 @@ Usage
 
   ./geckorun.py 
   
--d    + or -, direction along your axis to move
+-d    \+ or -, direction along your axis to move
 -y    move the second drive (for systems with two GM215 tied together)
