@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+use this program at your own risk. no emergency stop.
+Python >=3.5
+"""
 import serial
 from time import sleep
 #
@@ -48,7 +52,7 @@ def configdrive(S):
 
 def movedrive(S,step,direc,ymov):
     """
-    10000 steps/inch, 1000 is one rev. of motor
+    10000 steps/inch
     direc: positive: forward or up
            negative: backward or down
     """
