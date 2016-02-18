@@ -23,6 +23,7 @@ Install
 ::
 
   git clone https://github.com/scivision/geckodrive/
+  cd geckodrive
   python3 setup.py develop
   
 Usage Examples
