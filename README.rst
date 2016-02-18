@@ -37,3 +37,15 @@ Other parameters
 -s    steps per inch (verify for your drive! damage can result!)
 -a    acceleration for all axes
 -v    velocity for all axes
+
+Using from Matlab
+=================
+Like usual, you can use the ``system()`` function to make movements from Matlab. 
+
+Matlab usage example
+--------------------
+From within Matlab::
+
+  system('python3 gogecko.py x 10')
+  
+  system('python3 gogecko.py y -8')
