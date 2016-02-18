@@ -22,12 +22,13 @@ Install
 
   python setup.py develop
   
-Usage
-=====
+Usage Examples
+==============
 ::
 
   ./gogecko.py x 10
-  ./gogecko.py y 8 
+  
+  ./gogecko.py y -8 
   
 where the first argument is direction [x,y] and second number is distance in centimeters (positive or negative)
 
