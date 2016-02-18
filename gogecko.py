@@ -11,7 +11,6 @@ if __name__ == '__main__':
     p.add_argument('axis',help='x or y')
     p.add_argument('dist',help=' +/-distance in centimeters to move',type=float)
     p.add_argument('-s','--stepsperinch',help='steps per inch for your system',type=int,default=10000)
-    p.add_argument('-p','--port',help='port RS485 USB adapter is on',default='/dev/ttyUSB0')
     p.add_argument('-a','--accel',help='acceleration of movements (dont jerk the load)',type=int,default=5)
     p.add_argument('-v','--vel',help='velocity of movements',type=int,default=100)
     p = p.parse_args()
@@ -19,9 +18,9 @@ if __name__ == '__main__':
     try:
         S = connectdrive(p.port)
 
-        configdrive(S,p.accel,p.vel)
+        configdrive(S,p.accel,p.vel,p.port)
 
-        movedrive(S,p.axis,p.dist,p.stepsperinch)
+        movedrive(S,p.axis,p.dist,p.stepsperinch,p.port)
     except KeyboardInterrupt:
         pass
     finally:

@@ -10,8 +10,13 @@ import serial
 from time import sleep
 #
 bh = b'\x04\x00' #comes before all(?) commands
+PORT='/dev/ttyUSB0'
 
-def connectdrive(port='/dev/ttyUSB0'):
+
+def connectdrive(port=None):
+    if port is None:
+        port = PORT
+
     S = serial.Serial(
     port=port,
     baudrate=115200,
@@ -20,12 +25,10 @@ def connectdrive(port='/dev/ttyUSB0'):
     bytesize=serial.EIGHTBITS,
     xonxoff=serial.XOFF,
     rtscts=False,
-    dsrdtr=False
-    )
+    dsrdtr=False,
+    timeout = 0.02)
 
-    S.writeTimeout = 0.5
-
-    if S.open:
+    if S.isOpen():
         S.close()
 
     S.open()
@@ -33,7 +36,10 @@ def connectdrive(port='/dev/ttyUSB0'):
 
     return S
 
-def configdrive(S,accel=10,vel=100):
+def configdrive(S,accel=10,vel=100,port=None):
+    if not S.isOpen():
+        S=connectdrive(port)
+
     baccel = int2bytes(accel)
     bvel = int2bytes(vel)
 #%% params
@@ -55,10 +61,9 @@ def configdrive(S,accel=10,vel=100):
         S.write(bh+c)
         sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
 
-def movedrive(S,axis,dist_cm,steps_per_inch):
-    """
-
-    """
+def movedrive(S,axis,dist_cm,steps_per_inch,port=None):
+    if not S.isOpen():
+        S=connectdrive(port)
 #%% which direction
     if dist_cm<0:
         bdir = b'\x80'
