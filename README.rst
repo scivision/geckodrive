@@ -29,7 +29,7 @@ Usage
   ./gogecko.py x 10
   ./gogecko.py y 8 
   
-where the first argument is direction [x,y] and second number is distance in centimers (positive or negative)
+where the first argument is direction [x,y] and second number is distance in centimeters (positive or negative)
 
 Other parameters
 ----------------
