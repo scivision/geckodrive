@@ -10,6 +10,7 @@ if __name__ == '__main__':
     p = ArgumentParser(description='GeckoDrive GM215 Motion control code')
     p.add_argument('axis',help='x or y')
     p.add_argument('dist',help=' +/-distance in centimeters to move',type=float)
+    p.add_argument('-s','--stepsperinch',help='steps per inch for your system',type=int,default=10000)
     p.add_argument('-p','--port',help='port RS485 USB adapter is on',default='/dev/ttyUSB0')
     p.add_argument('-a','--accel',help='acceleration of movements (dont jerk the load)',type=int,default=5)
     p.add_argument('-v','--vel',help='velocity of movements',type=int,default=100)
@@ -20,7 +21,7 @@ if __name__ == '__main__':
 
         configdrive(S,p.accel,p.vel)
 
-        movedrive(S,p.axis,p.dist)
+        movedrive(S,p.axis,p.dist,p.stepsperinch)
     except KeyboardInterrupt:
         pass
     finally:

@@ -26,11 +26,13 @@ Usage
 =====
 ::
 
-  ./geckorun.py 
+  ./gogecko.py x 10
+  ./gogecko.py y 8 
   
--d    distance to move (cm) assuming 10000 steps per inch (verify with your drive!!)
--f    \+ or - direction along your axis to move
--y    move the second drive (for systems with two GM215 tied together)
+where the first argument is direction [x,y] and second number is distnace in centimers (positive or negative)
+
+Other parameters
+----------------
+-s    steps per inch (verify for your drive! damage can result!)
 -a    acceleration for all axes
 -v    velocity for all axes
--s    steps per motion

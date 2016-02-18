@@ -55,7 +55,7 @@ def configdrive(S,accel=10,vel=100):
         S.write(bh+c)
         sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
 
-def movedrive(S,axis,dist_cm):
+def movedrive(S,axis,dist_cm,steps_per_inch):
     """
 
     """
@@ -74,7 +74,7 @@ def movedrive(S,axis,dist_cm):
     else:
         raise ValueError('unknown direction {}'.format(axis))
 #%% how many steps
-    bstep = int2bytes(distcm2step(dist_cm))
+    bstep = int2bytes(distcm2step(dist_cm),steps_per_inch)
 #%% MOVE (no abort)
     S.write(bh+bdir+bxy+bstep)
 
