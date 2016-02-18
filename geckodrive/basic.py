@@ -13,9 +13,26 @@ bh = b'\x04\x00' #comes before all(?) commands
 PORT='/dev/ttyUSB0'
 
 
+class Simport():
+    def __init__(self):
+        pass
+
+    def isOpen(self):
+        return True
+
+    def write(self,cmd):
+        print(cmd)
+
+    def close(self):
+        print('simulation disconnect')
+
 def connectdrive(port=None):
-    if port is None:
+    if port == '/dev/null': #simulation mode
+        print('sim mode')
+        return Simport()
+    elif port is None:
         port = PORT
+
 
     S = serial.Serial(
     port=port,
@@ -26,7 +43,7 @@ def connectdrive(port=None):
     xonxoff=serial.XOFF,
     rtscts=False,
     dsrdtr=False,
-    timeout = 0.02)
+    timeout = 0.02) #this 0.02 timeout was in original SDK
 
     if S.isOpen():
         S.close()
@@ -79,7 +96,7 @@ def movedrive(S,axis,dist_cm,steps_per_inch,port=None):
     else:
         raise ValueError('unknown direction {}'.format(axis))
 #%% how many steps
-    bstep = int2bytes(distcm2step(dist_cm),steps_per_inch)
+    bstep = int2bytes(distcm2step(dist_cm,steps_per_inch))
 #%% MOVE (no abort)
     S.write(bh+bdir+bxy+bstep)
 
