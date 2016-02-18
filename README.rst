@@ -22,6 +22,7 @@ Install
 =======
 ::
 
+  git clone https://github.com/scivision/geckodrive/
   python3 setup.py develop
   
 Usage Examples
