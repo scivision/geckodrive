@@ -9,7 +9,8 @@ if PY2:
 import serial
 from time import sleep
 #
-bh = b'\x04\x00' #comes before all(?) commands
+bSTOP= b'\x01\00'
+bRUN = b'\x04\x00' 
 PORT='/dev/ttyUSB0'
 
 
@@ -53,6 +54,18 @@ def connectdrive(port=None):
 
     return S
 
+def stopdrive(S=None,port=None):
+    """
+    This function may not work. Whenever using a motor drive, be within reach 
+    of hardware emergency off switch!
+    """
+    if not S or not S.isOpen():
+        S=connectdrive(port)
+
+    S.write(bSTOP)
+    
+    
+
 def configdrive(S,accel=10,vel=100,port=None):
     if not S.isOpen():
         S=connectdrive(port)
@@ -75,7 +88,7 @@ def configdrive(S,accel=10,vel=100,port=None):
             ]
 
     for c in clist:
-        S.write(bh+c)
+        S.write(bRUN+c)
         sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
 
 def movedrive(S,axis,dist_cm,steps_per_inch,port=None):
@@ -98,7 +111,7 @@ def movedrive(S,axis,dist_cm,steps_per_inch,port=None):
 #%% how many steps
     bstep = int2bytes(distcm2step(dist_cm,steps_per_inch))
 #%% MOVE (no abort)
-    S.write(bh+bdir+bxy+bstep)
+    S.write(bRUN+bdir+bxy+bstep)
 
 def int2bytes(n,byteorder='little'):
     return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)

@@ -3,9 +3,16 @@
 use this program at your own risk. no emergency stop.
 Python >=3.5
 """
-from geckodrive.basic import connectdrive, configdrive, movedrive
+from sys import argv
+#
+from geckodrive.basic import connectdrive, configdrive, movedrive, stopdrive
 
 if __name__ == '__main__':
+    if len(argv)==1: #STOP --do not rely on this command. Be within reach of hardware off switch
+        stopdrive(); exit()
+    elif len(argv)==2: #assume only argument is port to STOP on. "" ""   ""   ""
+         stopdrive(port=argv[1]);  exit()
+
     from argparse import ArgumentParser
     p = ArgumentParser(description='GeckoDrive GM215 Motion control code')
     p.add_argument('axis',help='x or y')
