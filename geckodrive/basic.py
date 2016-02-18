@@ -3,6 +3,9 @@
 use this program at your own risk. no emergency stop.
 Python >=3.5
 """
+from six import PY2
+if PY2:
+    raise TypeError('this program requires Python >=3.5')
 import serial
 from time import sleep
 #
@@ -52,26 +55,34 @@ def configdrive(S,accel=10,vel=100):
         S.write(bh+c)
         sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
 
-def movedrive(S,step,direc,ymov):
+def movedrive(S,axis,dist_cm):
     """
-    10000 steps/inch
-    direc: positive: forward or up
-           negative: backward or down
+
     """
 #%% which direction
-    if direc=='-':
+    if dist_cm<0:
         bdir = b'\x80'
-    elif direc=='+':
+    elif dist_cm>=0:
         bdir = b'\x00'
-#%% which axis
-    if ymov:
-        bxy = b'\x41'
     else:
+        raise ValueError('unknown distance {} cm'.format(dist_cm))
+#%% which axis
+    if axis.lower()=='x':
+        bxy = b'\x41'
+    elif axis.lower()=='y':
         bxy = b'\x01'
+    else:
+        raise ValueError('unknown direction {}'.format(axis))
 #%% how many steps
-    bstep = int2bytes(step)
+    bstep = int2bytes(distcm2step(dist_cm))
 #%% MOVE (no abort)
     S.write(bh+bdir+bxy+bstep)
 
 def int2bytes(n,byteorder='little'):
     return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
+
+def distcm2step(dist_cm,steps_per_inch=10000):
+    """
+    verify steps per inch with your drive!!
+    """
+    return round(abs(dist_cm)/2.54 * steps_per_inch)

@@ -28,7 +28,9 @@ Usage
 
   ./geckorun.py 
   
--d    \+ or - direction along your axis to move
+-d    distance to move (cm) assuming 10000 steps per inch (verify with your drive!!)
+-f    \+ or - direction along your axis to move
 -y    move the second drive (for systems with two GM215 tied together)
 -a    acceleration for all axes
 -v    velocity for all axes
+-s    steps per motion
