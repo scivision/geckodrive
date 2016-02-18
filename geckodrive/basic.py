@@ -67,7 +67,7 @@ def stopdrive(S=None,port=None):
     
 
 def configdrive(S,accel=10,vel=100,port=None):
-    if not S.isOpen():
+    if not S or not S.isOpen():
         S=connectdrive(port)
 
     baccel = int2bytes(accel)
@@ -92,7 +92,7 @@ def configdrive(S,accel=10,vel=100,port=None):
         sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
 
 def movedrive(S,axis,dist_cm,steps_per_inch,port=None):
-    if not S.isOpen():
+    if not S or not S.isOpen():
         S=connectdrive(port)
 #%% which direction
     if dist_cm<0:
