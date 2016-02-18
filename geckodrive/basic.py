@@ -2,11 +2,11 @@
 import serial
 from time import sleep
 #
-bh = b'\x04\x00'
+bh = b'\x04\x00' #comes before all(?) commands
 
-def connectdrive():
+def connectdrive(port='/dev/ttyUSB0'):
     S = serial.Serial(
-    port='/dev/ttyUSB0',
+    port=port,
     baudrate=115200,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
@@ -16,13 +16,13 @@ def connectdrive():
     dsrdtr=False
     )
 
-    S.writeTimeout = 0.2
+    S.writeTimeout = 0.5
 
     if S.open:
         S.close()
 
     S.open()
-    assert S.isOpen(),'could not open connection to drive'
+    assert S.isOpen(),'could not open connection to drive on {}'.format(port)
 
     return S
 
@@ -44,7 +44,7 @@ def configdrive(S):
 
     for c in clist:
         S.write(bh+c)
-        sleep(0.05)
+        sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
 
 def movedrive(S,step,direc,ymov):
     """
@@ -66,24 +66,3 @@ def movedrive(S,step,direc,ymov):
     bstep=step.to_bytes((step.bit_length() // 8) + 1, byteorder='little')
 
     S.write(bh+bdir+bxy+bstep)
-
-if __name__ == '__main__':
-    from argparse import ArgumentParser
-    p = ArgumentParser(description='GeckoDrive BitBang code')
-    p.add_argument('--steps',help='(default 1cm) number of steps to move on each cmd',type=int,
-                   default=int(10000/2.54))
-    p.add_argument('-d','--dir',help='+ fwd, - rev',default='-')
-    p.add_argument('-y','--y',help='move in y',action='store_true')
-    p = p.parse_args()
-
-    try:
-        S = connectdrive()
-
-        configdrive(S)
-
-        movedrive(S,p.steps,p.dir,p.y)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        print('shutdown')
-        S.close()
