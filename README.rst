@@ -2,6 +2,10 @@
     :target: https://travis-ci.org/scivision/geckodrive
 .. image:: https://coveralls.io/repos/github/scivision/geckodrive/badge.svg?branch=master 
     :target: https://coveralls.io/github/scivision/geckodrive?branch=master
+.. image:: https://codeclimate.com/github/scivision/geckodrive/badges/gpa.svg
+   :target: https://codeclimate.com/github/scivision/geckodrive
+   :alt: Code Climate
+
 
 =============================================================
 GeckoDrive GeckoMotion Python alternative servo motor control
