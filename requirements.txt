@@ -1,2 +1,5 @@
+setuptools
+nose
+six
 pyserial
 numpy
