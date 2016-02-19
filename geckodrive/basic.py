@@ -1,39 +1,25 @@
 #!/usr/bin/env python3
 """
 use this program at your own risk. no emergency stop.
-Python >=3.5
 """
-from six import PY2
-if PY2:
-    raise TypeError('this program requires Python >=3.5')
+from typing import Union,Optional
 import serial
 from time import sleep
 #
+bESTOP=b'\x00\00' #unverified
 bSTOP= b'\x01\00'
-bRUN = b'\x04\x00' 
-PORT='/dev/ttyUSB0'
+bRUN = b'\x04\x00'
+PORT='/dev/ttyUSB0' #only if user didn't specify
 
 
-class Simport():
-    def __init__(self):
-        pass
-
-    def isOpen(self):
-        return True
-
-    def write(self,cmd):
-        print(cmd)
-
-    def close(self):
-        print('simulation disconnect')
-
-def connectdrive(port=None):
+def connectdrive(port:Optional[str]=None):
     if port == '/dev/null': #simulation mode
         print('simulation open')
-        return Simport()
+        S = Simport()
+        S.open()
+        return S
     elif port is None:
         port = PORT
-
 
     S = serial.Serial(
     port=port,
@@ -54,19 +40,30 @@ def connectdrive(port=None):
 
     return S
 
-def stopdrive(S=None,port=None):
+def estopdrive(S=None,port:Optional[str]=None):
     """
-    This function may not work. Whenever using a motor drive, be within reach 
+    This function may not work. Whenever using a motor drive, be within reach
+    of hardware emergency off switch!
+    """
+    if not S or not S.isOpen():
+        S=connectdrive(port)
+
+    S.write(bESTOP)
+    print('attempted EMERGENCY stop drive')
+
+def stopdrive(S=None, port:Optional[str]=None):
+    """
+    This function may not work. Whenever using a motor drive, be within reach
     of hardware emergency off switch!
     """
     if not S or not S.isOpen():
         S=connectdrive(port)
 
     S.write(bSTOP)
-    
-    
+    print('attempted to stop drive')
 
-def configdrive(S,accel=10,vel=100,port=None):
+def configdrive(S, accel:Union[int,float]=10, vel:Union[int,float]=100,
+                                                      port:Optional[str]=None):
     if not S or not S.isOpen():
         S=connectdrive(port)
 
@@ -89,9 +86,10 @@ def configdrive(S,accel=10,vel=100,port=None):
 
     for c in clist:
         S.write(bRUN+c)
-        sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
+        sleep(0.01) #without this pause, the drive won't always work. Minimum pause unknown.
 
-def movedrive(S,axis,dist_cm,steps_per_inch,port=None):
+def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
+                                                      port:Optional[str]=None):
     if not S or not S.isOpen():
         S=connectdrive(port)
 #%% which direction
@@ -113,11 +111,34 @@ def movedrive(S,axis,dist_cm,steps_per_inch,port=None):
 #%% MOVE (no abort)
     S.write(bRUN+bdir+bxy+bstep)
 
-def int2bytes(n,byteorder='little'):
+def int2bytes(n: int, byteorder: str='little') -> bytes:
     return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
 
-def distcm2step(dist_cm,steps_per_inch=10000):
+def distcm2step(dist_cm: Union[int,float], steps_per_inch: int=10000) -> int:
     """
     verify steps per inch with your drive!!
+    returns integer number of steps corresponding to centimeters requests.
+    sign is handled in move function.
     """
     return round(abs(dist_cm)/2.54 * steps_per_inch)
+
+from tempfile import mkstemp
+class Simport():
+    """
+    this class is used for selftest, when you don't have or want to use the RS485 convertor
+    or the real motor drive
+    """
+    def __init__(self):
+        import pipes
+        self.f = pipes.Template()
+
+    def isOpen(self):
+        return True
+
+    def write(self, cmd: bytes):
+        with self.f.open(mkstemp,'w') as f:
+            f.write(str(cmd))
+
+    def close(self):
+        self.f.reset()
+        print('simulation disconnect')

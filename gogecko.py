@@ -32,5 +32,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         pass
     finally:
+        stopdrive(S,p.port)
         print('Disconnect')
         S.close()
