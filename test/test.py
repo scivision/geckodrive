@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-from numpy.testing import assert_allclose,run_module_suite
-import pipes
+from numpy.testing import run_module_suite
 #
 from geckodrive.basic import *
 #
