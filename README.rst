@@ -21,11 +21,7 @@ There is no Emergency Stop facility in this code.
 
 Prereq
 ======
-This program is designed for Python >= 3.5, which can be obtained via::
-
-  wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-  bash Miniconda3*.sh
-
+Python 3
 
 Install
 =======
