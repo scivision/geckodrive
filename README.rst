@@ -1,3 +1,8 @@
+.. image:: https://travis-ci.org/scivision/geckodrive.svg?branch=master
+    :target: https://travis-ci.org/scivision/geckodrive
+.. image:: https://coveralls.io/repos/github/scivision/geckodrive/badge.svg?branch=master 
+    :target: https://coveralls.io/github/scivision/geckodrive?branch=master
+
 =============================================================
 GeckoDrive GeckoMotion Python alternative servo motor control
 =============================================================

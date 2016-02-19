@@ -11,13 +11,13 @@ PORT='/dev/null' #always using simulated port for selftest
 def test_stopdrive():
     S = Simport()
     stopdrive(S,PORT)
-    with S.f.open('pipe','r') as f:
+    with S.f.open(S.pipefn,'r') as f:
         assert f.read()==str(bSTOP)
 
 def test_estopdrive(): #not physically tested
     S = Simport()
     estopdrive(S,PORT)
-    with S.f.open('pipe','r') as f:
+    with S.f.open(S.pipefn,'r') as f:
         assert f.read()==str(bESTOP)
 
 def test_distcm2step():
@@ -30,7 +30,7 @@ def test_int2bytes():
 def test_movedrive():
     S = Simport()
     movedrive(S, axis='x',dist_cm=1, steps_per_inch=10000)
-    with S.f.open('pipe','r') as f:
+    with S.f.open(S.pipefn,'r') as f:
         assert f.read()==str(b'\x04\x00\x00Aa\x0f')
 
 

@@ -131,12 +131,13 @@ class Simport():
     def __init__(self):
         import pipes
         self.f = pipes.Template()
+        self.pipefn = mkstemp()[1]
 
     def isOpen(self):
         return True
 
     def write(self, cmd: bytes):
-        with self.f.open(mkstemp,'w') as f:
+        with self.f.open(self.pipefn,'w') as f:
             f.write(str(cmd))
 
     def close(self):
