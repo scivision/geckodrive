@@ -16,10 +16,6 @@ def connectdrive(port:Optional[str]=None):
     if port == '/dev/null': #simulation mode
         print('simulation open')
         S = Simport()
-<<<<<<< HEAD
-        S.open()
-=======
->>>>>>> mayhem
         return S
     elif port is None:
         port = PORT
@@ -33,11 +29,7 @@ def connectdrive(port:Optional[str]=None):
     xonxoff=serial.XOFF,
     rtscts=False,
     dsrdtr=False,
-<<<<<<< HEAD
-    timeout = 0.02) #this 0.02 timeout was in original SDK
-=======
     timeout = 0.2) #this 0.02 timeout was in original SDK
->>>>>>> mayhem
 
     if S.isOpen():
         S.close()
@@ -85,17 +77,6 @@ def configdrive(S, accel:Union[int,float]=10, vel:Union[int,float]=100,
              b'\x00\x53\xe8\x03', # y offset 1000
              b'\x00\x0a\x00\x00', # analog inputs to {0} ; NO AXIS USING ANALOG
              b'\x00\x0b\x00\x00', # vector axis are {0} ; NO AXIS USING VECTOR
-<<<<<<< HEAD
-             b'\x00\x0c'+baccel, # x acceleration
-             b'\x00\x4c'+baccel, # y acceleration
-             b'\x00\x07'+bvel, # x velocity
-             b'\x00\x47'+bvel, # y velocity
-            ]
-
-    for c in clist:
-        S.write(bRUN+c)
-        sleep(0.01) #without this pause, the drive won't always work. Minimum pause unknown.
-=======
              b'\x00\x0c\x12\x00',#+baccel, # x acceleration
              b'\x00\x4c\x12\x00',#+baccel, # y acceleration
              b'\x00\x07\xe8\x03',#+bvel, # x velocity
@@ -107,7 +88,6 @@ def configdrive(S, accel:Union[int,float]=10, vel:Union[int,float]=100,
         print(ccmd)
         S.write(ccmd)
         sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
->>>>>>> mayhem
 
 def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
                                                       port:Optional[str]=None):
@@ -130,14 +110,9 @@ def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
 #%% how many steps
     bstep = int2bytes(distcm2step(dist_cm,steps_per_inch))
 #%% MOVE (no abort)
-<<<<<<< HEAD
-    S.write(bRUN+bdir+bxy+bstep)
-=======
     movecmd=bRUN+bdir+bxy+bstep
     print('sending {}'.format(movecmd))
-	
     S.write(movecmd)
->>>>>>> mayhem
 
 def int2bytes(n: int, byteorder: str='little') -> bytes:
     return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
