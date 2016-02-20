@@ -62,7 +62,7 @@ def stopdrive(S=None, port:Optional[str]=None):
     print('attempted to stop drive')
 
 def configdrive(S, accel:Union[int,float]=10, vel:Union[int,float]=100,
-                                                      port:Optional[str]=None):
+                                   port:Optional[str]=None,verbose:bool=False):
     if not S or not S.isOpen():
         S=connectdrive(port)
 
@@ -77,20 +77,21 @@ def configdrive(S, accel:Union[int,float]=10, vel:Union[int,float]=100,
              b'\x00\x53\xe8\x03', # y offset 1000
              b'\x00\x0a\x00\x00', # analog inputs to {0} ; NO AXIS USING ANALOG
              b'\x00\x0b\x00\x00', # vector axis are {0} ; NO AXIS USING VECTOR
-             b'\x00\x0c\x12\x00',#+baccel, # x acceleration
-             b'\x00\x4c\x12\x00',#+baccel, # y acceleration
+             b'\x00\x0c\x05\x00',#+baccel, # x acceleration
+             b'\x00\x4c\x05\x00',#+baccel, # y acceleration
              b'\x00\x07\xe8\x03',#+bvel, # x velocity
              b'\x00\x47\xe8\x03',#+bvel, # y velocity
             ]
 
     for c in clist:
         ccmd = bRUN+c
-        print(ccmd)
+        if verbose:
+            print(ccmd)
         S.write(ccmd)
         sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
 
 def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
-                                                      port:Optional[str]=None):
+                                                port:Optional[str]=None,verbose:bool=False):
     if not S or not S.isOpen():
         S=connectdrive(port)
 #%% which direction
@@ -111,7 +112,8 @@ def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
     bstep = int2bytes(distcm2step(dist_cm,steps_per_inch))
 #%% MOVE (no abort)
     movecmd=bRUN+bdir+bxy+bstep
-    print('sending {}'.format(movecmd))
+    if verbose:
+        print('sending {}'.format(movecmd))
     S.write(movecmd)
 
 def int2bytes(n: int, byteorder: str='little') -> bytes:
