@@ -31,7 +31,14 @@ if __name__ == '__main__':
         movedrive(S,p.axis,p.dist,p.stepsperinch,p.port)
     except KeyboardInterrupt:
         pass
+<<<<<<< HEAD
     finally:
         stopdrive(S,p.port)
         print('Disconnect')
         S.close()
+=======
+#    finally:
+#        stopdrive(S,p.port)
+#        print('Disconnect')
+#       S.close()
+>>>>>>> mayhem
