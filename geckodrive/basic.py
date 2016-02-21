@@ -120,6 +120,7 @@ def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
     S.close()
 
 def int2bytes(n: int, byteorder: str='little') -> bytes:
+    assert 0 <= n < 65536,'need a better method to convert >65535, <I struct vs. <H struct'
     return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
 
 def distcm2step(dist_cm: Union[int,float], steps_per_inch: int=10000) -> int:
