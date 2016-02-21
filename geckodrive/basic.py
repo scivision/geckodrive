@@ -61,13 +61,14 @@ def stopdrive(S=None, port:Optional[str]=None):
     S.write(bSTOP)
     print('attempted to stop drive')
 
-def configdrive(S, accel:Union[int,float]=10, vel:Union[int,float]=100,
+def configdrive(S, #accel:Union[int,float]=10, vel:Union[int,float]=100,
                                    port:Optional[str]=None,verbose:bool=False):
     if not S or not S.isOpen():
         S=connectdrive(port)
 
-    baccel = int2bytes(accel)
-    bvel = int2bytes(vel)
+#FIXME accept user param
+    #baccel = int2bytes(accel)
+    #bvel = int2bytes(vel)
 #%% params
     clist = [b'\x19\x0e\x0a\x32', # x configure: 2.5 amps, idle at 50% after 1 seconds
              b'\x19\x4e\x0a\x32', # y configure: 2.5 amps, idle at 50% after 1 seconds
@@ -115,6 +116,8 @@ def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
     if verbose:
         print('sending {}'.format(movecmd))
     S.write(movecmd)
+
+    S.close()
 
 def int2bytes(n: int, byteorder: str='little') -> bytes:
     return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
