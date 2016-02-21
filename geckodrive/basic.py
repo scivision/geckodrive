@@ -89,12 +89,13 @@ def configdrive(S, #accel:Union[int,float]=10, vel:Union[int,float]=100,
         if verbose:
             print(ccmd)
         S.write(ccmd)
-        sleep(0.05) #without this pause, the drive won't always work. Minimum pause unknown.
+        sleep(0.02) #without this pause, the drive won't always work. Minimum pause unknown.
 
 def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
                                                 port:Optional[str]=None,verbose:bool=False):
     if not S or not S.isOpen():
         S=connectdrive(port)
+        configdrive(S,port)
 #%% which direction
     if dist_cm<0:
         bdir = b'\x80'
@@ -110,7 +111,7 @@ def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
     else:
         raise ValueError('unknown direction {}'.format(axis))
 #%% how many steps
-    bstep = int2bytes(distcm2step(dist_cm,steps_per_inch))
+    bstep = int2bytes(distcm2step(dist_cm,steps_per_inch,verbose))
 #%% MOVE (no abort)
     movecmd=bRUN+bdir+bxy+bstep
     if verbose:
@@ -122,13 +123,16 @@ def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
 def int2bytes(n: int, byteorder: str='little') -> bytes:
     return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
 
-def distcm2step(dist_cm: Union[int,float], steps_per_inch: int=10000) -> int:
+def distcm2step(dist_cm: Union[int,float], steps_per_inch:int=10000, verbose:bool=False) -> int:
     """
     verify steps per inch with your drive!!
     returns integer number of steps corresponding to centimeters requests.
     sign is handled in move function.
     """
-    return round(abs(dist_cm)/2.54 * steps_per_inch)
+    steps = round(abs(dist_cm)/2.54 * steps_per_inch)
+    if verbose:
+        print('{} steps'.format(steps))
+    return steps
 
 from tempfile import mkstemp
 class Simport():
