@@ -91,18 +91,18 @@ def configdrive(S, #accel:Union[int,float]=10, vel:Union[int,float]=100,
         S.write(ccmd)
         sleep(0.02) #without this pause, the drive won't always work. Minimum pause unknown.
 
-def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
+def movedrive(S, axis:str, dist_inch:Union[int,float], steps_per_inch:int,
                                                 port:Optional[str]=None,verbose:bool=False):
     if not S or not S.isOpen():
         S=connectdrive(port)
         configdrive(S,port)
 #%% which direction
-    if dist_cm<0:
+    if dist_inch<0:
         bdir = b'\x80'
-    elif dist_cm>=0:
+    elif dist_inch>=0:
         bdir = b'\x00'
     else:
-        raise ValueError('unknown distance {} cm'.format(dist_cm))
+        raise ValueError('unknown distance {}'.format(dist_inch))
 #%% which axis
     if axis.lower()=='x':
         bxy = b'\x41'
@@ -111,7 +111,7 @@ def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
     else:
         raise ValueError('unknown direction {}'.format(axis))
 #%% how many steps
-    bstep = int2bytes(distcm2step(dist_cm,steps_per_inch,verbose))
+    bstep = int2bytes(distinch2step(dist_inch,steps_per_inch,verbose))
 #%% MOVE (no abort)
     movecmd=bRUN+bdir+bxy+bstep
     if verbose:
@@ -123,6 +123,18 @@ def movedrive(S, axis:str, dist_cm:Union[int,float], steps_per_inch:int,
 def int2bytes(n: int, byteorder: str='little') -> bytes:
     assert 0 <= n < 65536,'need a better method to convert >65535, <I struct vs. <H struct'
     return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
+
+def distinch2step(dist_inch: Union[int,float], steps_per_inch:int=10000, verbose:bool=False) -> int:
+    """
+    verify steps per inch with your drive!!
+    returns integer number of steps corresponding to inches requests.
+    sign is handled in move function.
+    """
+    steps = round(abs(dist_inch) * steps_per_inch)
+    if verbose:
+        print('{} steps'.format(steps))
+    return steps
+
 
 def distcm2step(dist_cm: Union[int,float], steps_per_inch:int=10000, verbose:bool=False) -> int:
     """

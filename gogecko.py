@@ -1,22 +1,16 @@
 #!/usr/bin/env python3
 """
 use this program at your own risk. no emergency stop.
-Python >=3.5
+Python 3
 """
-from sys import argv
 #
-from geckodrive.basic import connectdrive, configdrive, movedrive, stopdrive
+from geckodrive.basic import connectdrive, configdrive, movedrive
 
 if __name__ == '__main__':
-    #if len(argv)==1: #STOP --do not rely on this command. Be within reach of hardware off switch
-    #    estopdrive(); exit()
-    #elif len(argv)==2: #assume only argument is port to STOP on. "" ""   ""   ""
-    #     estopdrive(port=argv[1]);  exit()
-
     from argparse import ArgumentParser
     p = ArgumentParser(description='GeckoDrive GM215 Motion control code')
     p.add_argument('axis',help='x or y')
-    p.add_argument('dist',help=' +/-distance in centimeters to move',type=float)
+    p.add_argument('dist_inch',help=' +/-distance in inches to move',type=float)
     p.add_argument('-s','--stepsperinch',help='steps per inch for your system',type=int,default=10000)
     #p.add_argument('-a','--accel',help='acceleration of movements (dont jerk the load)',type=int,default=5)
     #p.add_argument('-v','--vel',help='velocity of movements',type=int,default=100)
@@ -29,7 +23,7 @@ if __name__ == '__main__':
 
         configdrive(S,p.port)
 
-        movedrive(S,p.axis,p.dist,p.stepsperinch,p.port,p.verbose)
+        movedrive(S,p.axis,p.dist_inch,p.stepsperinch,p.port,p.verbose)
     except KeyboardInterrupt:
         pass
 #    finally:

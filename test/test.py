@@ -29,9 +29,9 @@ def test_int2bytes():
 
 def test_movedrive():
     S = Simport()
-    movedrive(S, axis='x',dist_cm=1, steps_per_inch=10000)
+    movedrive(S, axis='x',dist_inch=1, steps_per_inch=10000)
     with S.f.open(S.pipefn,'r') as f:
-        assert f.read()==str(b'\x04\x00\x00Aa\x0f')
+        assert f.read()==str(b"\x04\x00\x00A\x10'")
 
 
 if __name__ == '__main__':
