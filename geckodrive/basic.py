@@ -122,15 +122,14 @@ def movedrive(S, axis:str, dist_inch:Union[int,float], steps_per_inch:int,
     S.close()
 
 def int2bytes(n: int, byteorder: str='little') -> bytes:
-   # assert 0 <= n < 65536,'need a better method to convert >65535, <I struct vs. <H struct'
     #cmdbytes= n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
     cmdbytes = pack('<I',n)
     if n<65536:
         cmdbytes = cmdbytes[:-2]
     else:
-        tail = cmdbytes[-4:]
-        print(tail)
-        cmdbytes = cmdbytes[:-4] + tail[-2:] + tail[-4:-2]
+        raise NotImplementedError('more than 65535 steps not yet done')
+ #       tail = cmdbytes[-4:]
+  #      cmdbytes = cmdbytes[:-4] + tail[-2:] + tail[-4:-2]
     return cmdbytes
 
 
