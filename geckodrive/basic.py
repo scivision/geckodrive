@@ -5,6 +5,7 @@ use this program at your own risk. no emergency stop.
 from typing import Union,Optional
 import serial
 from time import sleep
+from struct import pack
 #
 bESTOP=b'\x00\00' #unverified
 bSTOP= b'\x01\00'
@@ -121,8 +122,9 @@ def movedrive(S, axis:str, dist_inch:Union[int,float], steps_per_inch:int,
     S.close()
 
 def int2bytes(n: int, byteorder: str='little') -> bytes:
-    assert 0 <= n < 65536,'need a better method to convert >65535, <I struct vs. <H struct'
-    return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
+   # assert 0 <= n < 65536,'need a better method to convert >65535, <I struct vs. <H struct'
+    #return n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
+    return pack('<I',n)
 
 def distinch2step(dist_inch: Union[int,float], steps_per_inch:int=10000, verbose:bool=False) -> int:
     """
