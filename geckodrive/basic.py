@@ -127,9 +127,12 @@ def int2bytes(n: int, byteorder: str='little') -> bytes:
     cmdbytes = pack('<I',n)
     if n<65536:
         cmdbytes = cmdbytes[:-2]
+    else:
+        tail = cmdbytes[-4:]
+        print(tail)
+        cmdbytes = cmdbytes[:-4] + tail[-2:] + tail[-4:-2]
     return cmdbytes
 
-    return pack('<I',n)
 
 def distinch2step(dist_inch: Union[int,float], steps_per_inch:int=10000, verbose:bool=False) -> int:
     """
