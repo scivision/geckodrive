@@ -6,6 +6,7 @@ from typing import Union,Optional
 import serial
 from time import sleep
 from struct import pack
+from numpy import sign
 #
 bESTOP=b'\x00\00' #unverified
 bSTOP= b'\x01\00'
@@ -112,14 +113,26 @@ def movedrive(S, axis:str, dist_inch:Union[int,float], steps_per_inch:int,
     else:
         raise ValueError('unknown direction {}'.format(axis))
 #%% how many steps
+    distmax = 65535/steps_per_inch
+    if abs(dist_inch)*steps_per_inch>65535:
+        q,r = divmod(abs(dist_inch),distmax)
+        for _ in range(int(q)):
+            domove(S,sign(dist_inch)*distmax,bdir,bxy,steps_per_inch,verbose)
+            sleep(30) #TODO base on speed, dist
+        domove(S,sign(dist_inch)*r,bdir,bxy,steps_per_inch,verbose)
+    else:
+        domove(S,dist_inch,bdir,bxy,steps_per_inch,verbose)
+
+    S.close()
+
+def domove(S,dist_inch,bdir,bxy,steps_per_inch,verbose):
+
     bstep = int2bytes(distinch2step(dist_inch,steps_per_inch,verbose))
 #%% MOVE (no abort)
     movecmd=bRUN+bdir+bxy+bstep
     if verbose:
-        print('sending {}'.format(movecmd))
+        print('moving {} inch, sending {}'.format(dist_inch,movecmd))
     S.write(movecmd)
-
-    S.close()
 
 def int2bytes(n: int, byteorder: str='little') -> bytes:
     #cmdbytes= n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
@@ -139,7 +152,7 @@ def distinch2step(dist_inch: Union[int,float], steps_per_inch:int=10000, verbose
     returns integer number of steps corresponding to inches requests.
     sign is handled in move function.
     """
-    steps = round(abs(dist_inch) * steps_per_inch)
+    steps = int(round(abs(dist_inch) * steps_per_inch))
     if verbose:
         print('{} steps'.format(steps))
     return steps
@@ -151,7 +164,7 @@ def distcm2step(dist_cm: Union[int,float], steps_per_inch:int=10000, verbose:boo
     returns integer number of steps corresponding to centimeters requests.
     sign is handled in move function.
     """
-    steps = round(abs(dist_cm)/2.54 * steps_per_inch)
+    steps = int(round(abs(dist_cm)/2.54 * steps_per_inch))
     if verbose:
         print('{} steps'.format(steps))
     return steps
