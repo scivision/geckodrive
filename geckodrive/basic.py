@@ -118,7 +118,7 @@ def movedrive(S, axis:str, dist_inch:Union[int,float], steps_per_inch:int,
         q,r = divmod(abs(dist_inch),distmax)
         for _ in range(int(q)):
             domove(S,sign(dist_inch)*distmax,bdir,bxy,steps_per_inch,verbose)
-            sleep(30) #TODO base on speed, dist
+            sleep(20) #TODO base on speed, dist
         domove(S,sign(dist_inch)*r,bdir,bxy,steps_per_inch,verbose)
     else:
         domove(S,dist_inch,bdir,bxy,steps_per_inch,verbose)
