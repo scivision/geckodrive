@@ -164,6 +164,7 @@ def distcm2step(dist_cm: Union[int,float], steps_per_inch:int=10000, verbose:boo
     returns integer number of steps corresponding to centimeters requests.
     sign is handled in move function.
     """
+    assert isinstance(steps_per_inch,int)
     steps = int(round(abs(dist_cm)/2.54 * steps_per_inch))
     if verbose:
         print('{} steps'.format(steps))

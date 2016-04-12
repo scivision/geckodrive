@@ -2,9 +2,13 @@
 from setuptools import setup #enables develop
 import subprocess
 
-
 with open('README.rst','r') as f:
 	  long_description = f.read()
+
+try:
+    subprocess.run(['conda','install','--yes','--quiet','--file','requirements.txt']) #don't use os.environ
+except Exception as e:
+    print('you will need to install packages in requirements.txt  {}'.format(e))
 
 #%% install
 setup(name='geckodrive',
@@ -16,7 +20,3 @@ setup(name='geckodrive',
       packages=['geckodrive'],
 	  )
 
-try:
-    subprocess.run(['conda','install','--yes','--quiet','--file','requirements.txt']) #don't use os.environ
-except Exception as e:
-    print('you will need to install packages in requirements.txt  {}'.format(e))

@@ -24,8 +24,7 @@ def test_distcm2step():
     assert distcm2step(1, 10000) == 3937
 
 def test_int2bytes():
-    assert(int2bytes(n=4, byteorder='little')+
-           int2bytes(n=0, byteorder='little')) == bRUN
+    assert int2bytes(n=4, byteorder='little') == bRUN
 
 def test_movedrive():
     S = Simport()
