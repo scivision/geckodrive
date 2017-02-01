@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 use this program at your own risk. no emergency stop.
-Python 3
 """
 #
-from geckodrive.basic import connectdrive, configdrive, movedrive
+from geckodrive import connectdrive, configdrive, movedrive
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
