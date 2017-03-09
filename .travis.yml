@@ -1,7 +1,7 @@
 language: python
 
 python:
-    - 3.5
+    - 3.6
 
 sudo: false
 
@@ -9,7 +9,7 @@ notifications:
   email: false
 
 git:
-  depth: 1
+  depth: 3
 
 before_install:
     - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
@@ -21,10 +21,11 @@ install:
     - conda create --yes -n test python=$TRAVIS_PYTHON_VERSION
     - source activate test
     - pip -q install coveralls
+    - conda install numpy
     - python setup.py develop
 
 script:
-    - coverage run test/test.py
+    - coverage run tests/test.py
 
 after_success:
     - coveralls

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from numpy.testing import run_module_suite
 #
-from geckodrive.basic import *
+from geckodrive import *
 #
 bESTOP=b'\x00\00' #unverified
 bSTOP= b'\x01\00'

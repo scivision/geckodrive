@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 use this program at your own risk. no emergency stop.
 """
@@ -6,6 +6,7 @@ import serial
 from time import sleep
 from struct import pack
 from numpy import sign
+from tempfile import mkstemp
 #
 bESTOP=b'\x00\00' #unverified
 bSTOP= b'\x01\00'
@@ -13,13 +14,11 @@ bRUN = b'\x04\x00'
 PORT='/dev/ttyUSB0' #only if user didn't specify
 
 
-def connectdrive(port=None):
+def connectdrive(port=PORT):
     if port == '/dev/null': #simulation mode
         print('simulation open')
         S = Simport()
         return S
-    elif port is None:
-        port = PORT
 
     S = serial.Serial(
     port=port,
@@ -36,7 +35,7 @@ def connectdrive(port=None):
         S.close()
 
     S.open()
-    assert S.isOpen(),'could not open connection to drive on {}'.format(port)
+    assert S.isOpen(),f'could not open connection to drive on {port}'
 
     return S
 
@@ -169,7 +168,7 @@ def distcm2step(dist_cm, steps_per_inch:int=10000, verbose:bool=False) -> int:
         print('{} steps'.format(steps))
     return steps
 
-from tempfile import mkstemp
+
 class Simport():
     """
     this class is used for selftest, when you don't have or want to use the RS485 convertor
