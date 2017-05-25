@@ -17,5 +17,6 @@ setup(name='geckodrive',
       author='Michael Hirsch, Ph.D.',
       url='https://github.com/scivision/geckodrive',
       description='control Geckodrive motion',
+      install_requires=req,
 	  )
 

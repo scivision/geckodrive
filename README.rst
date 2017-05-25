@@ -2,9 +2,7 @@
     :target: https://travis-ci.org/scivision/geckodrive
 .. image:: https://coveralls.io/repos/github/scivision/geckodrive/badge.svg?branch=master 
     :target: https://coveralls.io/github/scivision/geckodrive?branch=master
-.. image:: https://codeclimate.com/github/scivision/geckodrive/badges/gpa.svg
-   :target: https://codeclimate.com/github/scivision/geckodrive
-   :alt: Code Climate
+
 
 
 =============================================================
@@ -19,17 +17,12 @@ There is no Emergency Stop facility in this code.
 
 .. contents::
 
-Prereq
-======
-Python 3
 
 Install
 =======
 ::
 
-  git clone https://github.com/scivision/geckodrive/
-  cd geckodrive
-  python3 setup.py develop
+  python setup.py develop
   
 Usage Examples
 ==============
@@ -55,9 +48,9 @@ Matlab usage example
 --------------------
 From within Matlab::
 
-  system('python3 gogecko.py x 10')
+  system('python gogecko.py x 10')
   
-  system('python3 gogecko.py y -8')
+  system('python gogecko.py y -8')
 
 
 TODO
