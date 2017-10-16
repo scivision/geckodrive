@@ -1,10 +1,10 @@
-language: python
-
-python: 
-  - 3.6
+language: generic
 
 os:
   - linux
+  - osx
+  
+env: TRAVIS_PYTHON_VERSION=3.6
 
 notifications:
   email: false
@@ -15,12 +15,12 @@ git:
 
 before_install:
     - if [[ $TRAVIS_OS_NAME == osx ]]; then
-        wget http://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
       else 
-        wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
       fi
      
-install: 
+before_install: 
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH=$HOME/miniconda/bin:$PATH
     - hash -r
@@ -31,6 +31,7 @@ install:
     - source activate test
     - pip -q install coveralls
 
+install:
     - python setup.py develop
 
 script: coverage run tests/test.py -v
