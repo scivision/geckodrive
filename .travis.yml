@@ -3,17 +3,15 @@ language: generic
 os:
   - linux
   - osx
-  
+
 env: 
   - TRAVIS_PYTHON_VERSION=3.6
-
 
 notifications:
   email: false
 
 git:
   depth: 3
-
 
 before_install:
     - if [[ $TRAVIS_OS_NAME == osx ]]; then
