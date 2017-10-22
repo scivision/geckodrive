@@ -38,4 +38,3 @@ install:
 script: coverage run tests/test.py -v
 
 after_success: coveralls
-
