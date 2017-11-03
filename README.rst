@@ -4,7 +4,7 @@
 .. image:: https://coveralls.io/repos/github/scivision/geckodrive/badge.svg?branch=master 
     :target: https://coveralls.io/github/scivision/geckodrive?branch=master
 
-.. image:: https://api.codeclimate.com/v1/badges/56c6c1660e707d722b0074fd/maintainability
+.. image:: https://api.codeclimate.com/v1/badges/8244cc31073b44f253a9/maintainability
    :target: https://codeclimate.com/github/scivision/geckodrive/maintainability
    :alt: Maintainability
 
