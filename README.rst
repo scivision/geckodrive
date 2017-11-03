@@ -1,9 +1,12 @@
 .. image:: https://travis-ci.org/scivision/geckodrive.svg?branch=master
     :target: https://travis-ci.org/scivision/geckodrive
+    
 .. image:: https://coveralls.io/repos/github/scivision/geckodrive/badge.svg?branch=master 
     :target: https://coveralls.io/github/scivision/geckodrive?branch=master
 
-
+.. image:: https://api.codeclimate.com/v1/badges/56c6c1660e707d722b0074fd/maintainability
+   :target: https://codeclimate.com/github/scivision/geckodrive/maintainability
+   :alt: Maintainability
 
 =============================================================
 GeckoDrive GeckoMotion Python alternative servo motor control
