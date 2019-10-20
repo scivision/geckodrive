@@ -5,7 +5,6 @@ use this program at your own risk. no emergency stop.
 import serial
 from time import sleep
 from struct import pack
-from numpy import sign
 from tempfile import mkstemp
 #
 bESTOP = b'\x00\00'  # unverified
@@ -14,7 +13,7 @@ bRUN = b'\x04\x00'
 PORT = '/dev/ttyUSB0'  # only if user didn't specify
 
 
-def connectdrive(port: str=PORT):
+def connectdrive(port: str = PORT):
     if port == '/dev/null':  # simulation mode
         print('simulation open')
         S = Simport()
@@ -65,7 +64,7 @@ def stopdrive(S, port: str):
 
 
 # accel=10, vel=100,
-def configdrive(S, port: str, verbose: bool=False):
+def configdrive(S, port: str, verbose: bool = False):
     if not S or not S.isOpen():
         S = connectdrive(port)
 
@@ -96,7 +95,7 @@ def configdrive(S, port: str, verbose: bool=False):
 
 
 def movedrive(S, axis: str, dist_inch: float, steps_per_inch: int,
-              verbose: bool=False):
+              verbose: bool = False):
 
     # %% which direction
     if dist_inch < 0:
@@ -133,11 +132,11 @@ def domove(S, dist_inch: float, bdir: bytes, bxy: bytes,
 # %% MOVE (no abort)
     movecmd = bRUN+bdir+bxy+bstep
     if verbose:
-        print(f'moving {dist_inch} inch, sending {movecmd}')
+        print(f'moving {dist_inch} inch, sending', movecmd)
     S.write(movecmd)
 
 
-def int2bytes(n: int, byteorder: str='little') -> bytes:
+def int2bytes(n: int, byteorder: str = 'little') -> bytes:
     # cmdbytes= n.to_bytes((n.bit_length() // 8) + 1, byteorder=byteorder)
     cmdbytes = pack('<I', n)
     if n < 65536:
@@ -149,8 +148,8 @@ def int2bytes(n: int, byteorder: str='little') -> bytes:
     return cmdbytes
 
 
-def distinch2step(dist_inch, steps_per_inch: int=10000,
-                  verbose: bool=False) -> int:
+def distinch2step(dist_inch, steps_per_inch: int = 10000,
+                  verbose: bool = False) -> int:
     """
     verify steps per inch with your drive!!
     returns integer number of steps corresponding to inches requests.
@@ -162,8 +161,8 @@ def distinch2step(dist_inch, steps_per_inch: int=10000,
     return steps
 
 
-def distcm2step(dist_cm: float, steps_per_inch: int=10000,
-                verbose: bool=False) -> int:
+def distcm2step(dist_cm: float, steps_per_inch: int = 10000,
+                verbose: bool = False) -> int:
     """
     verify steps per inch with your drive!!
     returns integer number of steps corresponding to centimeters requests.
@@ -200,3 +199,15 @@ class Simport():
     def close(self):
         self.f.reset()
         print('simulation disconnect')
+
+
+def sign(x: float) -> float:
+    """ signum function """
+    if x < 0:
+        y = -1.0
+    elif x > 0:
+        y = 1.0
+    else:
+        y = 0.0
+
+    return y
